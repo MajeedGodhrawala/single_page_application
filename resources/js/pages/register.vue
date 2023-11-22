@@ -1,5 +1,4 @@
 <template>
-    <login_register_navbar></login_register_navbar>
     <main class="main-content mt-0">
         <section>
             <div class="page-header min-vh-100">
@@ -351,7 +350,6 @@
 </template>
 <script setup>
 import { reactive } from "vue";
-import login_register_navbar from "../components/login_register_navbar.vue";
 
 const data = reactive({
     formData: {
@@ -371,6 +369,7 @@ function submitForm() {
         .post("api/createUser", data.formData)
         .then(function (response) {
             if (response.data.success) {
+                data.errors = {};
                 window.location.href = "/";
             }
         })

@@ -1,5 +1,4 @@
 <template>
-    <login_register_navbar></login_register_navbar>
     <main class="main-content mt-0">
         <section>
             <div class="page-header min-vh-100">
@@ -177,7 +176,8 @@
 </template>
 <script setup>
 import { reactive } from "vue";
-import login_register_navbar from "../components/login_register_navbar.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const data = reactive({
     formData: {
@@ -191,11 +191,15 @@ function submitForm() {
     axios
         .post("api/loginUser", data.formData)
         .then(function (response) {
-            if (response.data.login_error) {
-                window.location.href = "dashboard";
-            }
+            response.data.login_error ? (data.errors = response.data) : null;
             if (response.data.success) {
-                console.log(response.data.success);
+                data.errors = {};
+
+                localStorage.setItem("token", response.data.token.token);
+                sessionStorage.setItem("token", response.data.token.token);
+
+                // Call dashboard Router
+                router.push("/dashboard");
             }
         })
         .catch(function (error) {

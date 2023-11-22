@@ -33,8 +33,11 @@ class authContoller extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if($user){
+               $token['token'] = $user->createToken($user->email)->plainTextToken;
+            // $token['token'] = $user->createToken($user->email)->accessToken;
                 return response()->json([
-                    'success' => $user->first_name.' '.$user->last_name
+                    'success' => $user->first_name.' '.$user->last_name,
+                    'token' => $token
                 ]);
             }
         } else {

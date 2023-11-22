@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\authContoller;
+use App\Http\Controllers\RoleController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('createUser',[authContoller::class,'createUser']);
 Route::post('loginUser',[authContoller::class,'loginUser']);
+
+//Role
+Route::post('getRolesData',[RoleController::class,'getRolesData']);
