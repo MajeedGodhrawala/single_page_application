@@ -5,14 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
-    public function getRolesData(Request $request) :JsonResponse
+    public function getRolesData() :JsonResponse
     {
-        $role = Role::query();
-        $total_records = count($role->get());
+        dd(Auth::user());
+        $roles = Role::query();
         
-        return response()->json(['success' => $total_records ]);
+        return response()->json(['roles' => $roles->get() ]);
     }
 }

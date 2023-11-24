@@ -59,7 +59,7 @@
                                         id="Link_id"
                                         name=""
                                         class="nav-link d-flex align-items-center me-2"
-                                        to="/"
+                                        to="/login"
                                     >
                                         <svg
                                             width="16"

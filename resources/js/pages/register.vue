@@ -335,7 +335,7 @@
                                         Already have an account?
                                         <router-link
                                             class="text-dark font-weight-bold"
-                                            to="/"
+                                            to="/login"
                                             >Sign in</router-link
                                         >
                                     </p>

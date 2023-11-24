@@ -72,7 +72,7 @@
                             </svg>
                         </a>
                     </li>
-                    <li
+                    <!-- <li
                         class="nav-item dropdown pe-2 d-flex align-items-center"
                     >
                         <a
@@ -242,21 +242,132 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
-                    <li class="nav-item ps-2 d-flex align-items-center">
-                        <a href="javascript:;" class="nav-link text-body p-0">
+                    </li> -->
+                    <li
+                        class="nav-item dropdown pe-2 d-flex align-items-center"
+                    >
+                        <a
+                            href="javascript:;"
+                            class="nav-link text-body p-0"
+                            id="dropdownMenuButton"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
                             <img
                                 src="assets/img/team-2.jpg"
                                 class="avatar avatar-sm"
                                 alt="avatar"
                             />
                         </a>
+                        <ul
+                            class="dropdown-menu dropdown-menu-end px-2 py-3 me-sm-n4"
+                            aria-labelledby="dropdownMenuButton"
+                        >
+                            <li>
+                                <a
+                                    class="dropdown-item border-radius-md"
+                                    href="javascript:;"
+                                    ><h5
+                                        class="text-sm font-weight-normal mb-1"
+                                    >
+                                        <span class="font-weight-bold"
+                                            >New message</span
+                                        >
+                                    </h5></a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    class="dropdown-item border-radius-md"
+                                    href="javascript:;"
+                                    ><h5
+                                        class="text-sm font-weight-normal mb-1"
+                                    >
+                                        <span class="font-weight-bold"
+                                            >New message</span
+                                        >
+                                    </h5></a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    class="dropdown-item border-radius-md"
+                                    href="javascript:;"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#logoutModal"
+                                    ><h5
+                                        class="text-sm font-weight-normal mb-1"
+                                    >
+                                        <span class="font-weight-bold"
+                                            >LogOut</span
+                                        >
+                                    </h5></a
+                                >
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+    <!-- Modal -->
+    <div
+        class="modal fade"
+        id="logoutModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="logoutModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title text-info" id="exampleModalLabel">
+                        Ready to Leave ?
+                    </h5>
+                    <button
+                        type="button"
+                        class="btn-close text-dark"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    >
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Select "<b class="text-danger">Logout</b>" below if you are
+                    ready to end your current session.
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        class="btn btn-white"
+                        data-bs-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                    <button
+                        type="button"
+                        @click="logout"
+                        class="btn btn-dark"
+                        data-bs-dismiss="modal"
+                    >
+                        LogOut
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 <script setup>
 import breadcrumb from "./breadcrumb.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+function logout() {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    router.push("/login");
+}
 </script>
