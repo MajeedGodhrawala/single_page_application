@@ -14,7 +14,6 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::create([
-            'role_id' => 1,
             'first_name' => 'Admin',
             'last_name' => 'Admin',
             'email' => 'admin@gmail.com',
@@ -26,7 +25,6 @@ class UserSeeder extends Seeder
             'isactive' => '1',
         ]);
         User::create([
-            'role_id' => 2,
             'first_name' => 'user1',
             'last_name' => 'user1',
             'email' => 'user1@gmail.com',
@@ -38,7 +36,6 @@ class UserSeeder extends Seeder
             'isactive' => '1',
         ]);
         User::create([
-            'role_id' => 2,
             'first_name' => 'user2',
             'last_name' => 'user2',
             'email' => 'user2@gmail.com',

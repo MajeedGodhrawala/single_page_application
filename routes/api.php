@@ -23,11 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('createUser',[authContoller::class,'createUser']);
 Route::post('loginUser',[authContoller::class,'loginUser']);
 
-//Role
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::post('getRolesData',[RoleController::class,'getRolesData']);
+    //Role
+    Route::post('allRolesData',[RoleController::class,'allRolesData']);
 });
-
-// Route::post('getRolesData',[RoleController::class,'getRolesData']);
 
