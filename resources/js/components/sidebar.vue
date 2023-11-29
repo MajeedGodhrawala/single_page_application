@@ -244,44 +244,70 @@
                             />
                         </svg>
                         <span class="font-weight-normal text-md ms-2"
-                            >Account Pages</span
+                            >Mangement Pages</span
                         >
                     </div>
                 </li>
-                <li class="nav-item border-start my-0 pt-2">
-                    <a
+                <li
+                    v-if="has_permission('view_profile')"
+                    class="nav-item border-start my-0 pt-2"
+                >
+                    <router-link
                         class="nav-link position-relative ms-0 ps-2 py-2"
-                        href="../pages/profile.html"
+                        name="profile"
+                        to="/profile"
                     >
                         <span class="nav-link-text ms-1">Profile</span>
-                    </a>
+                    </router-link>
+                </li>
+                <li
+                    v-if="has_permission('view_user')"
+                    class="nav-item border-start my-0 pt-2"
+                >
+                    <router-link
+                        class="nav-link position-relative ms-0 ps-2 py-2"
+                        router-link
+                        id="router-link"
+                        name="user"
+                        to="/user"
+                    >
+                        <span class="nav-link-text ms-1">User</span>
+                    </router-link>
+                </li>
+                <li
+                    v-if="has_permission('view_role')"
+                    class="nav-item border-start my-0 pt-2"
+                >
+                    <router-link
+                        class="nav-link position-relative ms-0 ps-2 py-2"
+                        router-link
+                        id="router-link"
+                        name="role"
+                        to="/role"
+                    >
+                        <span class="nav-link-text ms-1">Role</span>
+                    </router-link>
                 </li>
                 <li class="nav-item border-start my-0 pt-2">
-                    <a
+                    <router-link
                         class="nav-link position-relative ms-0 ps-2 py-2"
-                        href="../pages/sign-in.html"
+                        router-link
+                        id="router-link"
+                        name="permission"
+                        to="/permission"
                     >
-                        <span class="nav-link-text ms-1">Sign In</span>
-                    </a>
-                </li>
-                <li class="nav-item border-start my-0 pt-2">
-                    <a
-                        class="nav-link position-relative ms-0 ps-2 py-2"
-                        href="../pages/sign-up.html"
-                    >
-                        <span class="nav-link-text ms-1">Sign Up</span>
-                    </a>
+                        <span class="nav-link-text ms-1">Permission</span>
+                    </router-link>
                 </li>
             </ul>
         </div>
     </aside>
 </template>
 <script setup>
-import { onMounted } from "vue";
-
+import { onMounted, computed } from "vue";
+import { has_permission } from "../authPermissions";
 onMounted(() => {
     var links = document.querySelectorAll("#router-link");
-
     for (let link of links) {
         if (location.href.split("/").pop() == link.getAttribute("name")) {
             link.classList.add("active");

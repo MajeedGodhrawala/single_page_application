@@ -33,16 +33,18 @@ class AuthContoller extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if($user){
+               $user_permissions = $user->getPermissionsViaRoles();
                $token['token'] = $user->createToken($user->email)->plainTextToken;
             // $token['token'] = $user->createToken($user->email)->accessToken;
                 return response()->json([
                     'success' => $user->first_name.' '.$user->last_name,
-                    'token' => $token
+                    'token' => $token,'user_permissions' => $user_permissions,
                 ]);
             }
         } else {
             return response()->json([
-                'login_error' => 'Email Or Password Is Not Found !!'
+                'login_error' => 'Email Or Password Is Not Found !!',
+                
             ]);
         }
     }

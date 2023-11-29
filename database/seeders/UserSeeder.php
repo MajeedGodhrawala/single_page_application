@@ -13,17 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'first_name' => 'Admin',
-            'last_name' => 'Admin',
-            'email' => 'admin@gmail.com',
-            'phone_number' => '1111111111',
-            'password' => bcrypt('12345678'),
-            'country' => 'India',
-            'state' => 'Gujarat',
-            'accept_privacy' => '1',
-            'isactive' => '1',
-        ]);
+       
         User::create([
             'first_name' => 'user1',
             'last_name' => 'user1',

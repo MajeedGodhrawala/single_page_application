@@ -181,7 +181,7 @@ const router = useRouter();
 
 const data = reactive({
     formData: {
-        email_phonenumber: "1234567891",
+        email_phonenumber: "1111111111",
         password: "12345678",
     },
     errors: {},
@@ -194,10 +194,12 @@ function submitForm() {
             response.data.login_error ? (data.errors = response.data) : null;
             if (response.data.success) {
                 data.errors = {};
-
                 localStorage.setItem("token", response.data.token.token);
                 sessionStorage.setItem("token", response.data.token.token);
-
+                sessionStorage.setItem(
+                    "user_permissions",
+                    JSON.stringify(response.data.user_permissions)
+                );
                 // Call dashboard Router
                 router.push("/dashboard");
             }

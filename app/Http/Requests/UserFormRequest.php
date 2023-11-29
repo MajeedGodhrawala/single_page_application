@@ -28,12 +28,13 @@ class UserFormRequest extends FormRequest
             'email' => 'required|email|unique:users,email,'.$this->id,
             'phone_number' => 'required|digits:10|unique:users,phone_number,'.  $this->id,
             'password' => $this->id && $this->password == '' ? '' : 'required|min:8'   ,
-            'confirm_password' => 'required_with:password|same:password|min:8',
+            'confirm_password' => 'required_with:password|same:password',
             'state' => '',
             'country' => '',
             'isactive' => '',
             'profile_img' => '',
             'accept_privacy' => 'required|in:0,1' 
+            // 'accept_privacy' => '' 
         ];
         return $rules;
     }
@@ -41,7 +42,6 @@ class UserFormRequest extends FormRequest
     public function requestedField(){
         $data = [
             'id' => $this->id,
-            'role_id' => '2',
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'email' => $this->email,

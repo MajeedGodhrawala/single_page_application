@@ -18,6 +18,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    // protected function getDefaultGuardName(): string 
+    // {
+    //     return 'api';
+    // }
+
     protected $fillable = [
         'id',
         'role_id', 
@@ -52,4 +58,5 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    protected $guard_name = 'api';
 }

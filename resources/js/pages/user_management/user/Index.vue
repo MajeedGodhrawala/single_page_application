@@ -1,4 +1,5 @@
 <template>
+    <user_From ref="form" @userData="userData"></user_From>
     <div class="row">
         <div class="col-12">
             <div class="card border shadow-xs mb-4">
@@ -6,19 +7,15 @@
                     <div class="d-sm-flex align-items-center">
                         <div>
                             <h6 class="font-weight-semibold text-lg mb-0">
-                                Roles
+                                Users
                             </h6>
                         </div>
                         <div class="ms-auto d-flex">
                             <button
-                                type="button"
-                                class="btn btn-sm btn-white me-2"
-                            >
-                                View all
-                            </button>
-                            <button
+                                v-if="has_permission('add_user')"
                                 type="button"
                                 class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2"
+                                @click="userForm"
                             >
                                 <span class="btn-inner--icon">
                                     <svg
@@ -34,7 +31,7 @@
                                         />
                                     </svg>
                                 </span>
-                                <span class="btn-inner--text">Add member</span>
+                                <span class="btn-inner--text">Add User</span>
                             </button>
                         </div>
                     </div>
@@ -128,9 +125,33 @@
                                     <th
                                         class="text-secondary text-xs font-weight-bold"
                                     >
-                                        Display Name
+                                        Email
                                     </th>
                                     <th
+                                        class="text-secondary text-xs font-weight-bold"
+                                    >
+                                        Phone Number
+                                    </th>
+                                    <th
+                                        class="text-secondary text-xs font-weight-bold"
+                                    >
+                                        Country
+                                    </th>
+                                    <th
+                                        class="text-secondary text-xs font-weight-bold"
+                                    >
+                                        State
+                                    </th>
+                                    <th
+                                        class="text-secondary text-xs font-weight-bold"
+                                    >
+                                        Is Active
+                                    </th>
+                                    <th
+                                        v-if="
+                                            has_permission('edit_user') ||
+                                            has_permission('delete_user')
+                                        "
                                         class="text-secondary text-xs font-weight-bold"
                                     >
                                         Option
@@ -139,7 +160,7 @@
                             </thead>
                             <tbody>
                                 <tr
-                                    v-for="(role, index) in data.roles"
+                                    v-for="(user, index) in data.users"
                                     :key="index"
                                 >
                                     <td>
@@ -158,12 +179,22 @@
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div
+                                                class="d-flex align-items-center"
+                                            >
+                                                <img
+                                                    :src="user.profile_img"
+                                                    class="avatar avatar-sm rounded-circle me-2"
+                                                    alt="user1"
+                                                />
+                                            </div>
+                                            <div
                                                 class="d-flex flex-column justify-content-center ms-1"
                                             >
                                                 <h6
                                                     class="mb-0 text-sm font-weight-semibold"
                                                 >
-                                                    {{ role.name }}
+                                                    {{ user.first_name }}
+                                                    {{ user.last_name }}
                                                 </h6>
                                             </div>
                                         </div>
@@ -176,49 +207,88 @@
                                                 <h6
                                                     class="mb-0 text-sm font-weight-semibold"
                                                 >
-                                                    {{ role.display_name }}
+                                                    {{ user.email }}
                                                 </h6>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="align-middle text-center">
-                                        <a
-                                            href="javascript:;"
-                                            class="text-secondary font-weight-bold text-xs"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-title="Edit user"
-                                        >
-                                            <svg
-                                                width="14"
-                                                height="14"
-                                                viewBox="0 0 15 16"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div
+                                                class="d-flex flex-column justify-content-center ms-1"
                                             >
-                                                <path
-                                                    d="M11.2201 2.02495C10.8292 1.63482 10.196 1.63545 9.80585 2.02636C9.41572 2.41727 9.41635 3.05044 9.80726 3.44057L11.2201 2.02495ZM12.5572 6.18502C12.9481 6.57516 13.5813 6.57453 13.9714 6.18362C14.3615 5.79271 14.3609 5.15954 13.97 4.7694L12.5572 6.18502ZM11.6803 1.56839L12.3867 2.2762L12.3867 2.27619L11.6803 1.56839ZM14.4302 4.31284L15.1367 5.02065L15.1367 5.02064L14.4302 4.31284ZM3.72198 15V16C3.98686 16 4.24091 15.8949 4.42839 15.7078L3.72198 15ZM0.999756 15H-0.000244141C-0.000244141 15.5523 0.447471 16 0.999756 16L0.999756 15ZM0.999756 12.2279L0.293346 11.5201C0.105383 11.7077 -0.000244141 11.9624 -0.000244141 12.2279H0.999756ZM9.80726 3.44057L12.5572 6.18502L13.97 4.7694L11.2201 2.02495L9.80726 3.44057ZM12.3867 2.27619C12.7557 1.90794 13.3549 1.90794 13.7238 2.27619L15.1367 0.860593C13.9869 -0.286864 12.1236 -0.286864 10.9739 0.860593L12.3867 2.27619ZM13.7238 2.27619C14.0917 2.64337 14.0917 3.23787 13.7238 3.60504L15.1367 5.02064C16.2875 3.8721 16.2875 2.00913 15.1367 0.860593L13.7238 2.27619ZM13.7238 3.60504L3.01557 14.2922L4.42839 15.7078L15.1367 5.02065L13.7238 3.60504ZM3.72198 14H0.999756V16H3.72198V14ZM1.99976 15V12.2279H-0.000244141V15H1.99976ZM1.70617 12.9357L12.3867 2.2762L10.9739 0.86059L0.293346 11.5201L1.70617 12.9357Z"
-                                                    fill="#64748B"
-                                                />
-                                            </svg>
+                                                <h6
+                                                    class="mb-0 text-sm font-weight-semibold"
+                                                >
+                                                    {{ user.phone_number }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div
+                                                class="d-flex flex-column justify-content-center ms-1"
+                                            >
+                                                <h6
+                                                    class="mb-0 text-sm font-weight-semibold"
+                                                >
+                                                    {{ user.country }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div
+                                                class="d-flex flex-column justify-content-center ms-1"
+                                            >
+                                                <h6
+                                                    class="mb-0 text-sm font-weight-semibold"
+                                                >
+                                                    {{ user.state }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div
+                                                class="d-flex flex-column justify-content-center ms-1"
+                                            >
+                                                <span
+                                                    class="badge badge-sm border"
+                                                    :class="
+                                                        user.isactive
+                                                            ? ' border-success text-success bg-success'
+                                                            : 'border-danger text-danger bg-danger'
+                                                    "
+                                                    >{{
+                                                        user.isactive
+                                                            ? "Active"
+                                                            : "InActive"
+                                                    }}</span
+                                                >
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <a
+                                            v-if="has_permission('edit_user')"
+                                            href="javascript:;"
+                                            class="text-secondary font-weight-bold text-xs m-3"
+                                            @click="userForm(user)"
+                                        >
+                                            <i class="fa-solid fa-pen"></i>
                                         </a>
                                         <a
+                                            v-if="has_permission('delete_user')"
                                             href="javascript:;"
-                                            class="text-secondary font-weight-bold text-xs"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-title="Edit user"
+                                            class="text-secondary font-weight-bold text-xs m-3"
+                                            @click="destroy(user)"
                                         >
-                                            <svg
-                                                width="14"
-                                                height="14"
-                                                viewBox="0 0 15 16"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                            >
-                                                <path
-                                                    d="M11.2201 2.02495C10.8292 1.63482 10.196 1.63545 9.80585 2.02636C9.41572 2.41727 9.41635 3.05044 9.80726 3.44057L11.2201 2.02495ZM12.5572 6.18502C12.9481 6.57516 13.5813 6.57453 13.9714 6.18362C14.3615 5.79271 14.3609 5.15954 13.97 4.7694L12.5572 6.18502ZM11.6803 1.56839L12.3867 2.2762L12.3867 2.27619L11.6803 1.56839ZM14.4302 4.31284L15.1367 5.02065L15.1367 5.02064L14.4302 4.31284ZM3.72198 15V16C3.98686 16 4.24091 15.8949 4.42839 15.7078L3.72198 15ZM0.999756 15H-0.000244141C-0.000244141 15.5523 0.447471 16 0.999756 16L0.999756 15ZM0.999756 12.2279L0.293346 11.5201C0.105383 11.7077 -0.000244141 11.9624 -0.000244141 12.2279H0.999756ZM9.80726 3.44057L12.5572 6.18502L13.97 4.7694L11.2201 2.02495L9.80726 3.44057ZM12.3867 2.27619C12.7557 1.90794 13.3549 1.90794 13.7238 2.27619L15.1367 0.860593C13.9869 -0.286864 12.1236 -0.286864 10.9739 0.860593L12.3867 2.27619ZM13.7238 2.27619C14.0917 2.64337 14.0917 3.23787 13.7238 3.60504L15.1367 5.02064C16.2875 3.8721 16.2875 2.00913 15.1367 0.860593L13.7238 2.27619ZM13.7238 3.60504L3.01557 14.2922L4.42839 15.7078L15.1367 5.02065L13.7238 3.60504ZM3.72198 14H0.999756V16H3.72198V14ZM1.99976 15V12.2279H-0.000244141V15H1.99976ZM1.70617 12.9357L12.3867 2.2762L10.9739 0.86059L0.293346 11.5201L1.70617 12.9357Z"
-                                                    fill="#64748B"
-                                                />
-                                            </svg>
+                                            <i class="fa-solid fa-trash"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -244,33 +314,36 @@
     </div>
 </template>
 <script setup>
-import { reactive, onMounted } from "vue";
-import { useRouter } from "vue-router";
-const router = useRouter();
+import { reactive, onMounted, ref } from "vue";
+import user_From from "./Form.vue";
+import { has_permission } from "../../../authPermissions";
 const data = reactive({
-    roles: {},
+    users: {},
     current_page: 1,
     per_page: 5,
     search: "",
 });
 
+const form = ref(null);
+
 onMounted(() => {
-    RolesData();
+    userData();
 });
+
 const config = {
     headers: { Authorization: `Bearer ${localStorage.token}` },
 };
 
-function RolesData() {
+function userData() {
     let request_data = {
         per_page: data.per_page,
         search: data.search,
     };
     axios
-        .post("api/allRolesData", request_data, config)
+        .post("api/users/data-table", request_data, config)
         .then(function (response) {
-            if (response.data.roles) {
-                data.roles = response.data.roles;
+            if (response.data.users) {
+                data.users = response.data.users;
             }
         })
         .catch(function (error) {
@@ -278,10 +351,55 @@ function RolesData() {
         });
 }
 
+function userForm(user = null) {
+    form.value.form(user);
+}
+
+function destroy(user) {
+    Swal.fire({
+        title: "Are you sure?",
+        text:
+            "Do You Want To Delete " +
+            user.first_name +
+            " " +
+            user.last_name +
+            " Record",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+                .get(`api/users/destroy/${user.id}`, config)
+                .then(function (response) {
+                    if (response.data.delete) {
+                        Swal.fire("Deleted!", response.data.delete, "success");
+                        userData();
+                    }
+                })
+                .catch(function (error) {
+                    if (error.message) {
+                        errorAlert(error.message);
+                    }
+                });
+        }
+    });
+}
+
 function changePerpage() {
     data.current_page = 1;
-    RolesData();
+    userData();
     console.log(data.per_page);
+}
+
+function errorAlert(error) {
+    Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error,
+    });
 }
 
 function searchData(search) {
@@ -290,6 +408,6 @@ function searchData(search) {
     } else {
         data.search = "";
     }
-    RolesData();
+    userData();
 }
 </script>

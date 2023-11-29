@@ -43,6 +43,12 @@ const routes = [
                 component: () => import("./pages/unauthenticat.vue"),
                 meta: {
                     title: "Page Not Found",
+                    name: "UnAuthenticat",
+                    breadCrumb: [
+                        {
+                            text: "UnAuthenticat",
+                        },
+                    ],
                     requiresAuth: true,
                 },
             },
@@ -61,14 +67,59 @@ const routes = [
                 },
             },
             {
+                path: "/profile",
+                component: () => import("./pages/Profile.vue"),
+                meta: {
+                    title: "Profile",
+                    name: "Profile",
+                    breadCrumb: [
+                        {
+                            text: "Profile",
+                        },
+                    ],
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: "/user",
+                component: () =>
+                    import("./pages/user_management/user/Index.vue"),
+                meta: {
+                    title: "User",
+                    name: "User",
+                    breadCrumb: [
+                        {
+                            text: "User",
+                        },
+                    ],
+                    requiresAuth: true,
+                },
+            },
+            {
                 path: "/role",
-                component: () => import("./pages/role.vue"),
+                component: () =>
+                    import("./pages/user_management/role/Index.vue"),
                 meta: {
                     title: "Role",
                     name: "Role",
                     breadCrumb: [
                         {
                             text: "Role",
+                        },
+                    ],
+                    requiresAuth: true,
+                },
+            },
+            {
+                path: "/permission",
+                component: () =>
+                    import("./pages/user_management/permission/Permission.vue"),
+                meta: {
+                    title: "Permission",
+                    name: "Permission",
+                    breadCrumb: [
+                        {
+                            text: "Permission",
                         },
                     ],
                     requiresAuth: true,

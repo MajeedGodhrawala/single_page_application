@@ -1,4 +1,5 @@
 <template>
+    <From ref="form" @RolesData="RolesData"></From>
     <div class="row">
         <div class="col-12">
             <div class="card border shadow-xs mb-4">
@@ -11,14 +12,10 @@
                         </div>
                         <div class="ms-auto d-flex">
                             <button
-                                type="button"
-                                class="btn btn-sm btn-white me-2"
-                            >
-                                View all
-                            </button>
-                            <button
+                                v-if="has_permission('add_role')"
                                 type="button"
                                 class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2"
+                                @click="roleForm"
                             >
                                 <span class="btn-inner--icon">
                                     <svg
@@ -34,7 +31,7 @@
                                         />
                                     </svg>
                                 </span>
-                                <span class="btn-inner--text">Add member</span>
+                                <span class="btn-inner--text">Add Role</span>
                             </button>
                         </div>
                     </div>
@@ -116,14 +113,30 @@
                             <thead class="bg-gray-100">
                                 <tr>
                                     <th
-                                        v-for="(data, index) in data
-                                            .tableData[0]"
-                                        :key="index"
                                         class="text-secondary text-xs font-weight-bold"
                                     >
-                                        {{ index }}
+                                        Index
                                     </th>
                                     <th
+                                        class="text-secondary text-xs font-weight-bold"
+                                    >
+                                        Name
+                                    </th>
+                                    <th
+                                        class="text-secondary text-xs font-weight-bold"
+                                    >
+                                        Display Name
+                                    </th>
+                                    <th
+                                        class="text-secondary text-xs font-weight-bold"
+                                    >
+                                        Guard Name
+                                    </th>
+                                    <th
+                                        v-if="
+                                            has_permission('edit_role') ||
+                                            has_permission('delete_role')
+                                        "
                                         class="text-secondary text-xs font-weight-bold"
                                     >
                                         Option
@@ -131,7 +144,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
+                                <tr
+                                    v-for="(role, index) in data.roles"
+                                    :key="index"
+                                >
                                     <td>
                                         <div class="d-flex px-2 py-1">
                                             <div
@@ -140,23 +156,64 @@
                                                 <h6
                                                     class="mb-0 text-sm font-weight-semibold"
                                                 >
-                                                    Value
+                                                    {{ index + 1 }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div
+                                                class="d-flex flex-column justify-content-center ms-1"
+                                            >
+                                                <h6
+                                                    class="mb-0 text-sm font-weight-semibold"
+                                                >
+                                                    {{ role.name }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div
+                                                class="d-flex flex-column justify-content-center ms-1"
+                                            >
+                                                <h6
+                                                    class="mb-0 text-sm font-weight-semibold"
+                                                >
+                                                    {{ role.display_name }}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex px-2 py-1">
+                                            <div
+                                                class="d-flex flex-column justify-content-center ms-1"
+                                            >
+                                                <h6
+                                                    class="mb-0 text-sm font-weight-semibold"
+                                                >
+                                                    {{ role.guard_name }}
                                                 </h6>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
                                         <a
+                                            v-if="has_permission('edit_role')"
+                                            href="javascript:;"
                                             class="text-secondary font-weight-bold text-xs m-3"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-title="Edit user"
+                                            @click="roleForm(role)"
                                         >
                                             <i class="fa-solid fa-pen"></i>
                                         </a>
                                         <a
+                                            v-if="has_permission('delete_role')"
+                                            href="javascript:;"
                                             class="text-secondary font-weight-bold text-xs m-3"
-                                            data-bs-toggle="tooltip"
-                                            data-bs-title="Edit user"
+                                            @click="destroy(role)"
                                         >
                                             <i class="fa-solid fa-trash"></i>
                                         </a>
@@ -170,46 +227,12 @@
                             Page 1 of 10
                         </p>
                         <div class="ms-auto">
-                            <nav aria-label="...">
-                                <ul class="pagination">
-                                    <li class="page-item disabled">
-                                        <a
-                                            class="page-link"
-                                            href="javascript:;"
-                                            tabindex="-1"
-                                        >
-                                            <i class="fa fa-angle-left"></i>
-                                            <span class="sr-only"
-                                                >Previous</span
-                                            >
-                                        </a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript:;"
-                                            >1</a
-                                        >
-                                    </li>
-                                    <li class="page-item active">
-                                        <a class="page-link" href="javascript:;"
-                                            >2
-                                        </a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript:;"
-                                            >3</a
-                                        >
-                                    </li>
-                                    <li class="page-item">
-                                        <a
-                                            class="page-link"
-                                            href="javascript:;"
-                                        >
-                                            <i class="fa fa-angle-right"></i>
-                                            <span class="sr-only">Next</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <button class="btn btn-sm btn-white mb-0">
+                                Previous
+                            </button>
+                            <button class="btn btn-sm btn-white mb-0">
+                                Next
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -218,40 +241,94 @@
     </div>
 </template>
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive, onMounted, ref } from "vue";
+import { has_permission } from "../../../authPermissions";
+import From from "./From.vue";
 const data = reactive({
-    tableData: {},
+    roles: {},
+    current_page: 1,
+    per_page: 5,
     search: "",
 });
 
+const form = ref(null);
+
+onMounted(() => {
+    RolesData();
+});
 const config = {
     headers: { Authorization: `Bearer ${localStorage.token}` },
 };
 
-const props = defineProps({
-    name: String,
-});
-
-onMounted(() => {
-    console.log(props.name);
-    tableData();
-});
-
-function tableData() {
+function RolesData() {
     let request_data = {
-        // per_page: data.per_page,
+        per_page: data.per_page,
         search: data.search,
     };
     axios
-        .post("api/allRolesData", request_data, config)
+        .post("api/roles/data-table", request_data, config)
         .then(function (response) {
             if (response.data.roles) {
-                data.tableData = response.data.roles;
-                console.log(data.tableData);
+                data.roles = response.data.roles;
             }
         })
         .catch(function (error) {
             console.log(error);
         });
+}
+
+function roleForm(role = null) {
+    form.value.form(role);
+}
+
+function destroy(role) {
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Do You Want To Delete " + role.display_name + " Record",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            axios
+                .get(`api/roles/destroy/${role.id}`, config)
+                .then(function (response) {
+                    if (response.data.delete) {
+                        Swal.fire("Deleted!", response.data.delete, "success");
+                        RolesData();
+                    }
+                })
+                .catch(function (error) {
+                    if (error.message) {
+                        errorAlert(error.message);
+                    }
+                });
+        }
+    });
+}
+
+function changePerpage() {
+    data.current_page = 1;
+    RolesData();
+    console.log(data.per_page);
+}
+
+function errorAlert(error) {
+    Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error,
+    });
+}
+
+function searchData(search) {
+    if (search) {
+        data.search = search;
+    } else {
+        data.search = "";
+    }
+    RolesData();
 }
 </script>

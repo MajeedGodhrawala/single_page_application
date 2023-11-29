@@ -24,6 +24,7 @@ class RoleFormRequest extends FormRequest
         return [
             'name' => 'required|unique:roles,name,'.$this->id,
             'display_name' => 'required',
+            'guard_name' => '',
         ];
     }
 
@@ -32,6 +33,7 @@ class RoleFormRequest extends FormRequest
             'id' => $this->id,
             'name' => $this->name,
             'display_name' => $this->display_name,
+            'guard_name' => 'api',
         ];
         return $data;
     }
