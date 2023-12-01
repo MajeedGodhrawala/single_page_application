@@ -3,12 +3,11 @@
 namespace App\Imports;
 
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-
+use Closure;
 class RolesImport implements ToCollection, WithHeadingRow
 {
     /**
@@ -18,36 +17,58 @@ class RolesImport implements ToCollection, WithHeadingRow
     */
     public $summery = [
         'total_records'=> 0,
-         'create' => 0,
-         'update' => 0,
-      ];
+        'create' => 0,
+        'update' => 0,
+    ];
+
     public function collection(Collection $rows)
     {
-        $customMessages = [
-            'required' => 'The field is required.',
-            'unique' => 'The field is already exists.' ,
+        $custom_messages = [
+            'required' => ':input|The field is required.',
+            'string' => ':input|The field format is to be string.'
         ];
 
-        $validator = Validator::make($rows->toArray(), [
-            '*.name' => "required",
-       ],$customMessages);
-       $validator->validate();
+        Validator::make(
+            $rows->toArray(),
+            [
+                '*.id' => function (string $attribute, mixed $value, Closure $fail){
+                    if($value){
+                        if(!Role::where('id', '=', $value)->exists()){
+                            $fail(":input|The field format is invalid.");
+                        }
+                    }
+                },
+                '*.name' => "required|string|min:2",
+                '*.display_name' => "required|string|min:2",
+        ],$custom_messages)
+        ->validate();
+       
 
-       foreach ($rows as $key=>$row) 
+       $update_array = [];
+
+       foreach ($rows as $row) 
         {  
-            $check_role = Role::where('id', '=', $row['id'])
+            $role = Role::where('id', '=', $row['id'])
                 ->orWhere('name', '=', $row['name'])
-                ->first();
-            
-            $role = $check_role ?? new Role();
+                ->first() ?? new Role();
+
+            if(!in_array($role->id || $role->name,$update_array)){
+                array_push($update_array,$role->id);
+            }
+
             $role->fill([
-                        'name' => $row['name'],
-                        'display_name' => $row['display_name'],
-                        'guard_name' => $row['guard_name'],
-                    ])->save();
+                'name' => $row['name'],
+                'display_name' => $row['display_name'],
+                'guard_name' => 'api',
+            ])->save();
                     
             $this->summery['total_records'] = count($rows);
-            $this->summery[$check_role ? 'update' : 'create']++;
+
+            if($row['id'] || $row['name'] == null){
+                $this->summery['create']++;
+            }
+            
+            $this->summery['update'] = count($update_array);
         }
     }
 }

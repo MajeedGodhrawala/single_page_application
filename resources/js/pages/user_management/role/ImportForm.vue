@@ -27,19 +27,23 @@
                 <tr>
                     <td>Row</td>
                     <td>Field</td>
+                    <td>Value</td>
                     <td>Error</td>
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="(error, index) in data.errors" :key="index">
                     <td>
-                        {{ index.split(".")[0] }}
+                        {{ parseInt(index.split(".")[0]) + 2 }}
                     </td>
                     <td>
                         {{ index.split(".")[1] }}
                     </td>
+                    <td>
+                        {{ error[0].split("|")[0] }}
+                    </td>
                     <td class="text-danger">
-                        {{ error[0] }}
+                        {{ error[0].split("|")[1] }}
                     </td>
                 </tr>
             </tbody>
@@ -93,6 +97,7 @@ function uploadFile(e) {
         })
         .catch(function (error) {
             if (error.response.data.errors) {
+                console.log(error.response.data.errors);
                 data.errors = error.response.data.errors;
             } else if (error.message) {
                 errorAlert(error.message);

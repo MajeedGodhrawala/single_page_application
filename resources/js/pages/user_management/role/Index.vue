@@ -163,11 +163,6 @@
                                         Display Name
                                     </th>
                                     <th
-                                        class="text-secondary text-xs font-weight-bold"
-                                    >
-                                        Guard Name
-                                    </th>
-                                    <th
                                         v-if="
                                             has_permission('edit_role') ||
                                             has_permission('delete_role')
@@ -218,19 +213,6 @@
                                                     class="mb-0 text-sm font-weight-semibold"
                                                 >
                                                     {{ role.display_name }}
-                                                </h6>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex px-2 py-1">
-                                            <div
-                                                class="d-flex flex-column justify-content-center ms-1"
-                                            >
-                                                <h6
-                                                    class="mb-0 text-sm font-weight-semibold"
-                                                >
-                                                    {{ role.guard_name }}
                                                 </h6>
                                             </div>
                                         </div>

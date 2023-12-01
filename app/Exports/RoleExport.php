@@ -13,11 +13,10 @@ class RoleExport implements FromCollection, WithHeadings
     /**
     * @return \Illuminate\Support\Collection
     */
+    
     public function collection()
     {
-        return Role::select('id','name','display_name','guard_name')
-        ->get();
-       
+        return Role::select('id','name','display_name')->get();
     }
 
     public function headings(): array
@@ -26,7 +25,6 @@ class RoleExport implements FromCollection, WithHeadings
             'Id',
             'Name',
             'Display Name',
-            'Guard Name',
         ];
     }
 }

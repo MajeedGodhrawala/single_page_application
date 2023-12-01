@@ -23,7 +23,7 @@ class RoleController extends Controller
             $roles->where('name', 'like', '%' .$request->search. '%')
             ->orWhere('display_name', 'like', '%' .$request->search. '%');
         }
-        $roles = $roles->select(['id', 'name', 'display_name', 'guard_name'])->get();
+        $roles = $roles->select(['id', 'name', 'display_name'])->get();
         
         return response()->json(['roles' => $roles ]);
     }
