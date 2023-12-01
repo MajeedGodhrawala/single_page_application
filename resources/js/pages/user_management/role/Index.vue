@@ -1,5 +1,6 @@
 <template>
     <From ref="form" @RolesData="RolesData"></From>
+    <ImportFileForm ref="importfile" @RolesData="RolesData"></ImportFileForm>
     <div class="row">
         <div class="col-12">
             <div class="card border shadow-xs mb-4">
@@ -32,6 +33,40 @@
                                     </svg>
                                 </span>
                                 <span class="btn-inner--text">Add Role</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2"
+                                @click="importFile"
+                            >
+                                <span class="btn-inner--icon">
+                                    <i
+                                        width="16"
+                                        height="16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        class="d-block me-2 fa-solid fa-file-import"
+                                    ></i>
+                                </span>
+                                <span class="btn-inner--text">Import File</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2"
+                                @click="exportFile"
+                            >
+                                <span class="btn-inner--icon">
+                                    <i
+                                        width="16"
+                                        height="16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        class="d-block me-2 fa-solid fa-download"
+                                    ></i>
+                                </span>
+                                <span class="btn-inner--text">Export File</span>
                             </button>
                         </div>
                     </div>
@@ -244,6 +279,7 @@
 import { reactive, onMounted, ref } from "vue";
 import { has_permission } from "../../../authPermissions";
 import From from "./From.vue";
+import ImportFileForm from "./ImportForm.vue";
 const data = reactive({
     roles: {},
     current_page: 1,
@@ -252,6 +288,7 @@ const data = reactive({
 });
 
 const form = ref(null);
+const importfile = ref(null);
 
 onMounted(() => {
     RolesData();
@@ -279,6 +316,40 @@ function RolesData() {
 
 function roleForm(role = null) {
     form.value.form(role);
+}
+
+function importFile() {
+    importfile.value.importForm();
+}
+
+const headers = {
+    Authorization: `Bearer ${localStorage.token}`,
+};
+
+function exportFile() {
+    axios
+        .get("api/roles/export-file", { headers, responseType: "blob" })
+        .then(function (response) {
+            if (response.data) {
+                const url = window.URL.createObjectURL(
+                    new Blob([response.data])
+                );
+                const link = document.createElement("a");
+                link.href = url;
+                let date = new Date();
+                link.setAttribute(
+                    "download",
+                    `Roles-${date.getDay()}-${date.getMonth()}-${date.getFullYear()}.csv`
+                );
+                document.body.appendChild(link);
+                link.click();
+            }
+        })
+        .catch(function (error) {
+            if (error.message) {
+                errorAlert(error.message);
+            }
+        });
 }
 
 function destroy(role) {

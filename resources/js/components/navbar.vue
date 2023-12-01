@@ -198,6 +198,8 @@ const router = useRouter();
 function logout() {
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
+
+    sessionStorage.removeItem("user_permissions");
     router.push("/login");
 }
 </script>

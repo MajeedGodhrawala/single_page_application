@@ -48,6 +48,8 @@ Route::prefix('roles')->as('roles.')->middleware('auth:sanctum')->group(function
     Route::post('/data-table',[RoleController::class,'allRolesData']);
     Route::post('/create-or-update/{role?}',[RoleController::class,'createOrUpdate'])->middleware('role_or_permission:add_role|edit_role');
     Route::get('/destroy/{role}',[RoleController::class,'destroy'])->middleware('role_or_permission:delete_role');
+    Route::post('/upload-csv-file',[RoleController::class,'import']);
+    Route::get('/export-file',[RoleController::class,'export']);
 });
 
 //Permission
