@@ -366,7 +366,7 @@ const data = reactive({
 
 function submitForm() {
     axios
-        .post("api/createUser", data.formData)
+        .post("api/create-user", data.formData)
         .then(function (response) {
             if (response.data.success) {
                 data.errors = {};

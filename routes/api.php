@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('createUser',[authContoller::class,'createUser']);
+Route::post('create-user',[authContoller::class,'createUser'])->name('create_user');
 Route::post('loginUser',[authContoller::class,'loginUser']);
 
 
@@ -38,23 +38,23 @@ Route::prefix('profile')->as('profile.')->middleware('auth:sanctum')->group(func
 
 //User
 Route::prefix('users')->as('users.')->middleware('auth:sanctum')->group(function(){
-    Route::post('/data-table',[UserControlller::class,'allUserData']);
-    Route::post('/create-or-update/{user?}',[UserControlller::class,'createOrUpdate']);
-    Route::get('/destroy/{user}',[UserControlller::class,'destroy']);
+    Route::post('/data-table',[UserControlller::class,'allUserData'])->name('data_table');
+    Route::post('/create-or-update/{user?}',[UserControlller::class,'createOrUpdate'])->name('create_or_update');
+    Route::get('/destroy/{user}',[UserControlller::class,'destroy'])->name('destroy');
 });
 
 //Role
 Route::prefix('roles')->as('roles.')->middleware('auth:sanctum')->group(function(){
-    Route::post('/data-table',[RoleController::class,'allRolesData']);
-    Route::post('/create-or-update/{role?}',[RoleController::class,'createOrUpdate'])->middleware('role_or_permission:add_role|edit_role');
-    Route::get('/destroy/{role}',[RoleController::class,'destroy'])->middleware('role_or_permission:delete_role');
+    Route::post('/data-table',[RoleController::class,'allRolesData'])->name('data_table');
+    Route::post('/create-or-update/{role?}',[RoleController::class,'createOrUpdate'])->name('create_or_update')->middleware('role_or_permission:add_role|edit_role');
+    Route::get('/destroy/{role}',[RoleController::class,'destroy'])->name('destroy')->middleware('role_or_permission:delete_role');
     Route::post('/upload-csv-file',[RoleController::class,'import']);
     Route::get('/export-file',[RoleController::class,'export']);
 });
 
 //Permission
 Route::prefix('permissions')->as('permissions.')->middleware('auth:sanctum')->group(function(){
-    Route::get('/data-table',[PermissionController::class,'allPermissionsWithRoles']);
-    Route::post('/update-role_permissions',[PermissionController::class,'updateRolePermissions']);
+    Route::get('/data-table',[PermissionController::class,'allPermissionsWithRoles'])->name('data_table');
+    Route::post('/update-role_permissions',[PermissionController::class,'updateRolePermissions'])->name('update_role_permissions');
    
 });

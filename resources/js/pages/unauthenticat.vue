@@ -48,7 +48,7 @@
 }
 </style>
 <template>
-    <a target="_blank" href="https://codepen.io/uiswarup/full/bGOWKqg">
+    <a target="_blank">
         <div class="container">
             <div class="row">
                 <div class="col-sm-12 col-md-12 mt-5 mb-5">
@@ -1242,29 +1242,5 @@
             </div>
         </div>
     </a>
-    Resources
 </template>
-<script setup>
-import { onMounted } from "vue";
-
-onMounted(() => {
-    // anime({
-    //     targets: ".row svg",
-    //     translateY: 10,
-    //     autoplay: true,
-    //     loop: true,
-    //     easing: "easeInOutSine",
-    //     direction: "alternate",
-    // });
-    // anime({
-    //     targets: "#zero",
-    //     translateX: 10,
-    //     autoplay: true,
-    //     loop: true,
-    //     easing: "easeInOutSine",
-    //     direction: "alternate",
-    //     scale: [{ value: 1 }, { value: 1.4 }, { value: 1, delay: 250 }],
-    //     rotateY: { value: "+=180", delay: 200 },
-    // });
-});
-</script>
+<script setup></script>
