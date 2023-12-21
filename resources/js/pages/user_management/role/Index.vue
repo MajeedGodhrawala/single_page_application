@@ -68,6 +68,61 @@
                                 </span>
                                 <span class="btn-inner--text">Export File</span>
                             </button>
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2"
+                                @click="sendTestData"
+                            >
+                                <span class="btn-inner--icon">
+                                    <i
+                                        width="16"
+                                        height="16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        class="d-block me-2 fa-solid fa-download"
+                                    ></i>
+                                </span>
+                                <span class="btn-inner--text">Test Data</span>
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2"
+                                @click="CalculateEmployeesTotalInTime"
+                            >
+                                <span class="btn-inner--icon">
+                                    <i
+                                        width="16"
+                                        height="16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        class="d-block me-2 fa-solid fa-download"
+                                    ></i>
+                                </span>
+                                <span class="btn-inner--text"
+                                    >Calculate Emp In Time</span
+                                >
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-dark btn-icon d-flex align-items-center me-2"
+                                @click="sendNewTestData"
+                            >
+                                <span class="btn-inner--icon">
+                                    <i
+                                        width="16"
+                                        height="16"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        class="d-block me-2 fa-solid fa-download"
+                                    ></i>
+                                </span>
+                                <span class="btn-inner--text"
+                                    >New Test Data</span
+                                >
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -383,5 +438,171 @@ function searchData(search) {
         data.search = "";
     }
     RolesData();
+}
+
+function sendTestData() {
+    let data = [
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-01 10:10:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-02 10:00:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-02 19:10:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-03 10:30:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-04 10:14:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-04 12:30:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-04 15:30:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-04 10:30:20",
+        },
+    ];
+    axios
+        .post("api/send-data-test", data)
+        .then(function (response) {
+            if (response.data) {
+            }
+        })
+        .catch(function (error) {
+            if (error.message) {
+                errorAlert(error.message);
+            }
+        });
+}
+
+function sendNewTestData() {
+    let data = [
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-05 10:30:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "2",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-05 10:45:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "3",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-05 11:00:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-05 19:00:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "2",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-05 19:05:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "3",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-05 19:10:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "2",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-05 20:30:20",
+        },
+    ];
+    axios
+        .post("api/calculate-new-in-time", data)
+        .then(function (response) {
+            if (response.data) {
+            }
+        })
+        .catch(function (error) {
+            if (error.message) {
+                errorAlert(error.message);
+            }
+        });
+}
+
+function CalculateEmployeesTotalInTime() {
+    axios
+        .get("api/calculate-employee-total-in-time")
+        .then(function (response) {
+            if (response.data) {
+            }
+        })
+        .catch(function (error) {
+            if (error.message) {
+                errorAlert(error.message);
+            }
+        });
 }
 </script>

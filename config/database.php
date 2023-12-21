@@ -43,6 +43,12 @@ return [
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
 
+        'sqlite_local' => [
+            'driver' => 'sqlite',
+            'database' =>  'C:\MAJEED\SDK\MantraBioTimeSDK\MantraBioTimeSDK\Sample\MantraBioTimeSDK\bin\x86\Debug\Database\MantraBioTimeDB.sqlite',
+            'prefix' => '',
+        ],
+
         'mysql' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),

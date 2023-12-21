@@ -58,3 +58,10 @@ Route::prefix('permissions')->as('permissions.')->middleware('auth:sanctum')->gr
     Route::post('/update-role_permissions',[PermissionController::class,'updateRolePermissions'])->name('update_role_permissions');
    
 });
+
+
+//Test SDK Data
+Route::post('/send-data-test',[RoleController::class,'sendDataTest']);
+Route::get('/calculate-employee-total-in-time',[RoleController::class,'CalculateEmployeesTotalInTime']);
+Route::post('/calculate-new-in-time',[RoleController::class,'CalculateNewInTime']);
+

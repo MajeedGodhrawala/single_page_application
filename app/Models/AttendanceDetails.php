@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class AttendanceDetails extends Model
+{
+    use HasFactory;
+    protected $table = 'attendance_details';
+    protected $guarded = [];
+    protected $casts = [
+        'attendance_date' => 'date',
+    ];
+}

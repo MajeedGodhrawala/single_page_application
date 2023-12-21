@@ -6,10 +6,14 @@ use App\Exports\RoleExport;
 use App\Http\Requests\FileRequest;
 use App\Http\Requests\RoleFormRequest;
 use App\Imports\RolesImport;
+use App\Models\AttendanceDetails;
+use App\Models\TempAttendanceDetails;
+use DateTime;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 
 class RoleController extends Controller
@@ -50,5 +54,93 @@ class RoleController extends Controller
         return Excel::download(new RoleExport, 'roles.csv', \Maatwebsite\Excel\Excel::CSV, [
             'Content-Type' => 'text/csv',
         ]);
+
+    }
+
+    public function sendDataTest(Request $request){
+        // $jsonData = $request->getContent();
+        // $data = json_decode($jsonData, true);
+        
+        //dd(gettype($request->all()));
+        foreach($request->all() as $data){
+            TempAttendanceDetails::updateOrInsert(
+                $data
+            );
+        }
+        // DB::table('attendence')->upsert($request->all(), 'VDateTime');
+        // if($data){
+        //     return response()->json(['status' => 'Success]);
+        // }
+        //     return response()->json(['status' => 'Failed']);
+    }
+
+    public function CalculateEmployeesTotalInTime(){
+        $attendence_datas = TempAttendanceDetails::select([
+            DB::raw("DATE_FORMAT(VDateTime,'%Y-%m-%d') as date"),
+            DB::raw("DATE_FORMAT(VDateTime,'%H:%s:%i') as time"),
+            'UserId as employee_id',
+            'VDateTime as verify_date_time'
+        ])->orderBy('date', 'ASC')->get();
+        $attendence_group_data = $attendence_datas->groupBy(['date','employee_id']);
+        
+        $attendence_details = [];
+        foreach($attendence_group_data as $date=>$employee_data){
+            foreach($employee_data as $employee_id=>$data){
+                for($increment = 0; $increment < count($data); $increment++){
+                    if($increment % 2 == 0){
+                        $array['employee_id'] = $employee_id;
+                        $array['attendance_date'] = $date;
+                        $array['time_in'] = $data[$increment]->time;
+                        $array['time_out'] = $data[$increment + 1]->time ?? null;
+                        $time_in = new DateTime($array['time_in']);
+                        $time_out = new DateTime($array['time_out']);
+
+                        $difference = $time_out->getTimestamp() - $time_in->getTimestamp() ;
+                        
+                        $difference = intval(floor($difference / 60));
+
+                        $array['time_different'] = $difference >= 0 ? $difference : null;
+                        array_push($attendence_details,$array);
+                    }
+                }
+            }
+        }
+        foreach($attendence_details as $attendence_detail){
+            AttendanceDetails::create($attendence_detail);
+        }
+    }
+
+    public function CalculateNewInTime(Request $request){
+        foreach($request->all() as $data){
+            $employee_detail = AttendanceDetails::where('employee_id', '=', $data['UserId'])->where('attendance_date', '=', explode(" ",$data['VDateTime'])[0])->where('time_out', '=', null)->first();
+
+            if($employee_detail){
+                $time_out = new DateTime(explode(" ",$data['VDateTime'])[1]);
+                $time_in = new DateTime($employee_detail->time_in);
+
+                $difference = $time_out->getTimestamp() - $time_in->getTimestamp();
+                $difference = intval(floor($difference / 60));
+                
+                $employee_detail->update([
+                    'employee_id' => $employee_detail->employee_id,
+                    'attendance_date' => $employee_detail->attendance_date,
+                    'time_in' => $employee_detail->time_in,
+                    'time_out' => $time_out,
+                    'time_different' => $difference,
+                ]);
+            } else {
+                AttendanceDetails::create([
+                    'employee_id' => $data['UserId'],
+                    'attendance_date' => explode(" ",$data['VDateTime'])[0],
+                    'time_in' => explode(" ",$data['VDateTime'])[1],
+                    'time_out' => null,
+                    'time_different' => null,
+                ]);
+            }
+            //To Save New Data in Temp(SDK dump data) Attendence Table
+            TempAttendanceDetails::updateOrInsert(
+                $data
+            );
+        }
     }
 }
