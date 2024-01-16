@@ -125,6 +125,21 @@ const routes = [
                     requiresAuth: true,
                 },
             },
+            {
+                path: "/addhaarCardVerification",
+                component: () =>
+                    import("./pages/addharCardVerification.vue"),
+                meta: {
+                    title: "Addhaar Card Verification",
+                    name: "Addhaar Card Verification",
+                    breadCrumb: [
+                        {
+                            text: "Addhaar Card Verification",
+                        },
+                    ],
+                    requiresAuth: true,
+                },
+            },
         ],
     },
 ];

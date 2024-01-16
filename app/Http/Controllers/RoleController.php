@@ -57,21 +57,34 @@ class RoleController extends Controller
 
     }
 
-    public function sendDataTest(Request $request){
-        // $jsonData = $request->getContent();
-        // $data = json_decode($jsonData, true);
+
+
+//.NET ALL-OLD DATA CALL 
+    public function sendOldData(Request $request){
+        $jsonData = $request->getContent();
+        $data = json_decode($jsonData, true);
         
         //dd(gettype($request->all()));
+        // foreach($request->all() as $data){
+        //     TempAttendanceDetails::updateOrInsert(
+        //         $data
+        //     );
+        // }
+            return response()->json(['status' => $data ? $data :'Failed']);
+    }
+
+
+//.NET NEW DATA CALL 
+    public function sendNewData(Request $request){
+        $jsonData = $request->getContent();
+        $data = json_decode($jsonData, true);
+        
         foreach($request->all() as $data){
             TempAttendanceDetails::updateOrInsert(
                 $data
             );
         }
-        // DB::table('attendence')->upsert($request->all(), 'VDateTime');
-        // if($data){
-        //     return response()->json(['status' => 'Success]);
-        // }
-        //     return response()->json(['status' => 'Failed']);
+            return response()->json(['status' => $data ?  :'Failed']);
     }
 
     public function CalculateEmployeesTotalInTime(){
@@ -106,7 +119,7 @@ class RoleController extends Controller
             }
         }
         foreach($attendence_details as $attendence_detail){
-            AttendanceDetails::create($attendence_detail);
+            TempAttendanceDetails::updateOrInsert($attendence_detail);
         }
     }
 

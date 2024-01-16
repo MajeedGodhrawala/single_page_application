@@ -578,6 +578,46 @@ function sendNewTestData() {
             VerifyMode: "1",
             VDateTime: "2023-12-05 20:30:20",
         },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-06 10:25:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "2",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-06 10:35:50",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "2",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-06 17:30:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "2",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-06 17:50:20",
+        },
+        {
+            MachineNo: "1",
+            DeviceType: "2",
+            UserId: "1",
+            VerifyType: "1",
+            VerifyMode: "1",
+            VDateTime: "2023-12-06 19:45:20",
+        },
     ];
     axios
         .post("api/calculate-new-in-time", data)

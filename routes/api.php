@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddhaarCardVerification;
 use App\Http\Controllers\authContoller;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -59,9 +60,14 @@ Route::prefix('permissions')->as('permissions.')->middleware('auth:sanctum')->gr
    
 });
 
+//AdhaarCardVerification 
+Route::post('/verify',[AddhaarCardVerification::class,'verify']);
+
 
 //Test SDK Data
-Route::post('/send-data-test',[RoleController::class,'sendDataTest']);
+Route::post('/send-old-data',[RoleController::class,'sendOldData']);
+Route::post('/send-new-data',[RoleController::class,'sendNewData']);
+
 Route::get('/calculate-employee-total-in-time',[RoleController::class,'CalculateEmployeesTotalInTime']);
 Route::post('/calculate-new-in-time',[RoleController::class,'CalculateNewInTime']);
 
